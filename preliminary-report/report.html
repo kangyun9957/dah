@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>DAH 2026 예선 보고서 – UAV/UGV 공격 시나리오 대응 방어 AI 시스템</title>
+<style>
+  @page { size: A4; margin: 22mm 18mm 22mm 18mm; }
+  @page :first { margin: 0; }
+  :root{
+    --ink:#0b1220; --ink2:#1f2a44; --muted:#5b6679; --line:#dbe2ee;
+    --accent:#0b3d91; --accent2:#0e6fb8; --warn:#b3261e; --ok:#0f7a3a;
+    --bg-soft:#f5f7fb; --code:#0f172a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Malgun Gothic","Pretendard","Noto Sans KR","Segoe UI",sans-serif;
+    color:var(--ink); font-size:10.5pt; line-height:1.55;
+  }
+  h1,h2,h3,h4{color:var(--ink); margin:18pt 0 6pt; line-height:1.25}
+  h1{font-size:20pt; border-bottom:2px solid var(--accent); padding-bottom:6pt}
+  h2{font-size:14.5pt; color:var(--accent); margin-top:22pt; border-left:5px solid var(--accent); padding-left:8pt}
+  h3{font-size:12pt; color:var(--ink2); margin-top:14pt}
+  h4{font-size:10.8pt; color:var(--ink2); margin-top:10pt}
+  p{margin:6pt 0; text-align:justify}
+  ul,ol{margin:6pt 0 6pt 18pt; padding:0}
+  li{margin:3pt 0}
+  small{color:var(--muted)}
+  code,pre{font-family:"Consolas","D2Coding","JetBrains Mono",monospace; font-size:9pt}
+  code{background:#eef2fa; padding:1px 4px; border-radius:3px; color:#0b1b3a}
+  pre{
+    background:var(--code); color:#e6edf6; padding:10px 12px; border-radius:6px;
+    overflow:hidden; white-space:pre-wrap; word-wrap:break-word; page-break-inside:avoid;
+  }
+  pre .k{color:#7ee787}.s{color:#a5d6ff}.c{color:#8b949e;font-style:italic}.n{color:#ffa657}
+  blockquote{margin:6pt 0; padding:8pt 12pt; background:var(--bg-soft); border-left:4px solid var(--accent2); color:var(--ink2)}
+  table{width:100%; border-collapse:collapse; margin:8pt 0; font-size:9.6pt; page-break-inside:avoid}
+  th,td{border:1px solid var(--line); padding:5pt 7pt; vertical-align:top}
+  th{background:#eaf0fa; color:var(--ink); text-align:left}
+  tr:nth-child(even) td{background:#fafbfd}
+  .cover{
+    width:100%; height:297mm; background:linear-gradient(135deg,#06122e 0%, #0b3d91 55%, #103e7d 100%);
+    color:#fff; padding:40mm 22mm; position:relative; page-break-after:always;
+  }
+  .cover .tag{font-family:Consolas,monospace; letter-spacing:2px; font-size:10pt; color:#9bd3ff}
+  .cover h1{font-size:32pt; color:#fff; border:0; padding:0; margin:14pt 0 8pt; line-height:1.15}
+  .cover .sub{font-size:14pt; color:#cfe0ff; margin-top:8pt; max-width:130mm; line-height:1.4}
+  .cover .meta{position:absolute; left:22mm; right:22mm; bottom:30mm; display:flex; justify-content:space-between; font-size:10pt; color:#cfe0ff}
+  .cover .meta div{border-top:1px solid #4f7bd1; padding-top:6pt; min-width:55mm}
+  .cover .meta strong{color:#fff; display:block; font-size:11.5pt; margin-bottom:2pt}
+  .cover .logo{position:absolute; right:22mm; top:30mm; font-family:Consolas,monospace; font-size:11pt; color:#9bd3ff; text-align:right; line-height:1.4}
+  .badge{display:inline-block; padding:2px 8px; border-radius:10px; font-size:9pt; background:#eaf0fa; color:var(--accent); margin-right:4px}
+  .badge.warn{background:#fdecec; color:var(--warn)}
+  .badge.ok{background:#e6f4ec; color:var(--ok)}
+  .badge.cri{background:#3b0a0a; color:#ffd6d6}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:10pt}
+  .grid3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:8pt}
+  .card{border:1px solid var(--line); border-radius:6px; padding:10pt 12pt; background:#fff; page-break-inside:avoid}
+  .card .t{font-weight:700; color:var(--accent); margin-bottom:4pt}
+  .toc a{color:var(--ink); text-decoration:none}
+  .toc li{margin:3pt 0}
+  .page-break{page-break-before:always}
+  .avoid{page-break-inside:avoid}
+  .ascii{font-family:Consolas,monospace; white-space:pre; background:#fafbfd; border:1px solid var(--line); padding:10pt; border-radius:6px; font-size:8.6pt; line-height:1.35}
+  .footer-note{font-size:8.6pt; color:var(--muted); margin-top:4pt}
+  .scoring{font-family:Consolas,monospace; background:#0f172a; color:#9bd3ff; padding:8pt; border-radius:6px}
+  .kbd{font-family:Consolas,monospace; border:1px solid #c7cfdd; border-bottom-width:2px; border-radius:4px; padding:1px 5px; font-size:9pt; background:#fff}
+  hr{border:0; border-top:1px solid var(--line); margin:14pt 0}
+</style>
+</head>
+<body>
+
+<!-- ===================== COVER ===================== -->
+<section class="cover">
+  <div class="logo">DAH&nbsp;2026<br>PRELIMINARY · v1.0</div>
+  <div class="tag">DEFENSE AI CYBER SECURITY HACKATHON · PRELIMINARY REPORT</div>
+  <h1>UAV/UGV 공격 시나리오 대응<br>방어 AI 시스템 설계</h1>
+  <div class="sub">
+    위성망 모사 클라우드 환경에서의 다중 에이전트 기반<br>
+    탐지·대응·복원(Detect–Respond–Recover) 아키텍처
+  </div>
+  <div class="meta">
+    <div><strong>제출 부문</strong>방산 AI 공방전 · 예선 보고서</div>
+    <div><strong>대상 환경</strong>UAV / UGV · SATCOM 모사 Cloud</div>
+    <div><strong>일자</strong>2026.07 (예선 마감 기준)</div>
+  </div>
+</section>
+
+<!-- ===================== EXEC SUMMARY ===================== -->
+<h1>Executive Summary</h1>
+<p>
+본 보고서는 DAH 2026 예선 심사 배점표(공격 시나리오 30점, 방어 전략 25점, AI 에이전트 아키텍처 25점, 팀 역량 10점, 문서 완성도 10점)에 정합하도록 작성되었으며,
+<strong>"AI 에이전트가 자율적으로 판단하여 공방을 수행한다"</strong>는 본 대회의 본질적 차별점을 전제로 한다.
+본선 채점식 <code>total = (attack + defense) &times; availability</code>는 단순한 침투/차단 능력이 아니라
+<strong>"무력화 없이 통제력을 유지하는 능력"</strong>을 측정한다. 이는 군용 UAV/UGV 작전의 본질 — <em>임무 지속성(Mission Assurance)</em> — 과
+정확히 동일한 평가축이며, 본 보고서의 모든 설계 결정은 가용성 보존을 최우선 제약으로 둔다.
+</p>
+
+<div class="grid3 avoid">
+  <div class="card"><div class="t">전제</div>
+    UAV/UGV는 단순 IT가 아닌 <b>CPS(Cyber-Physical System)</b>이며,
+    GNSS·RF·CAN·MAVLink·STANAG 4586·MIL-STD-1553 등 도메인 특화 표면을 갖는다.
+  </div>
+  <div class="card"><div class="t">접근</div>
+    공격 10개 시나리오 / 방어 4-계층 / AI 에이전트 4-역할(Sentinel · Hunter · Healer · Coordinator).
+    LLM(추론) + RL(제어) 하이브리드 의사결정.
+  </div>
+  <div class="card"><div class="t">성과 목표</div>
+    공격 점수 ≥ 70% · 방어 차단율 ≥ 85% · SLA 가용성 ≥ 95% 유지로
+    <b>가중 합계 최대화</b>.
+  </div>
+</div>
+
+<h3>본 보고서의 4가지 차별 포인트</h3>
+<ol>
+  <li><b>도메인 정합성</b> — MAVLink 2.0, STANAG 4586, DDS-Security(OMG), MIL-STD-1553B 등 실제 방산·무인이동체 프로토콜을 명시적으로 다룬다.</li>
+  <li><b>AI-on-AI 위협 통합</b> — MITRE ATLAS 기반 적대적 머신러닝(Adversarial ML) 공격을 별도 시나리오가 아닌 <em>모든 인지 계층의 횡단 위협</em>으로 모델링한다.</li>
+  <li><b>가용성 우선 설계</b> — 채점식의 곱셈 항을 의식해 모든 대응 액션에 <em>가용성 영향 비용 함수(c_avail)</em>를 부여, 강화학습 보상 설계에 직접 반영한다.</li>
+  <li><b>증명 가능한 의사결정</b> — LLM 추론에는 <em>Reasoning Trace + Tool Logs</em>를 강제하여 사후 분석 및 NDA 준수성을 확보한다.</li>
+</ol>
+
+<!-- ===================== TOC ===================== -->
+<div class="page-break"></div>
+<h1>목차</h1>
+<ol class="toc">
+  <li>서론 — UAV/UGV 사이버보안 패러다임</li>
+  <li>위협 모델링 — 공격 표면, MITRE ATT&amp;CK · ATLAS · STRIDE 매핑</li>
+  <li>공격 시나리오 설계 (10건, 본선 공방용)</li>
+  <li>방어 전략 — Defense-in-Depth × Zero Trust × Resilient Control</li>
+  <li>AI 방어 에이전트 아키텍처 — 다중 에이전트 · LLM+RL 하이브리드</li>
+  <li>채점식 최적화 — 가용성 보존 보상 설계</li>
+  <li>구현 로드맵 · 평가 계획 · 리스크</li>
+  <li>팀 역량 및 운영 체계</li>
+  <li>부록 A — 참고 표준 · 문헌 · 자료</li>
+  <li>부록 B — 약어 및 용어 정의</li>
+</ol>
+
+<!-- ===================== 1. 서론 ===================== -->
+<div class="page-break"></div>
+<h1>1. 서론 — UAV/UGV 사이버보안 패러다임</h1>
+
+<h2>1.1 왜 "AI 공방전"인가</h2>
+<p>
+현대 무인이동체(UAV/UGV)는 통신·항법·제어·인지가 단일 임베디드 스택 내에서 결합되어 동작하는 사이버-물리 시스템이다.
+공격 표면은 (1) <b>RF/전자기 영역</b> — GNSS, 위성, 데이터링크, (2) <b>버스/프로토콜 영역</b> — CAN, MIL-STD-1553B, MAVLink, STANAG 4586,
+(3) <b>컴퓨트/OS 영역</b> — RTOS, Linux, 컨테이너, (4) <b>인지/AI 영역</b> — 비전·LiDAR·SLAM·강화학습 정책 으로 4중화되어 있다.
+사람이 키보드로 이 4개 표면을 동시에 다루는 것은 비현실적이며, 실제 작전 템포에서는 <b>판단 지연(latency) 자체가 패배 원인</b>이다.
+DAH 2026이 사람이 아닌 <em>AI 에이전트의 자율 공방</em>을 요구하는 이유가 여기에 있다.
+</p>
+
+<h2>1.2 작전 환경의 제약 — 가용성이 곧 임무</h2>
+<p>
+본선 환경은 위성망(SATCOM)을 모사한 클라우드 인프라에서 동작한다. 위성 링크의 특성상 (i) <b>왕복 지연 600–800 ms</b>, (ii) <b>대역폭 제한</b>,
+(iii) <b>버스트 손실</b>이 상시적이다. 방어 측 에이전트는 단순히 IDS 룰을 강화하는 것만으로는 임무 손실을 피할 수 없으며,
+<em>"공격을 받는 중에도 비행체가 임무 궤적을 유지한다"</em>는 자세 — 즉 <b>회복탄력성(Resilience)</b> — 이 핵심이다.
+이는 NIST SP 800-160 Vol.2 "Developing Cyber Resilient Systems"의 원칙과 정합한다.
+</p>
+
+<h2>1.3 본 보고서가 적용하는 설계 원칙</h2>
+<table>
+  <tr><th>#</th><th>원칙</th><th>출처</th><th>본 설계 적용</th></tr>
+  <tr><td>P1</td><td>Defense-in-Depth (다층 방어)</td><td>NIST SP 800-82r3</td><td>RF/Bus/Compute/AI 4계층 모두에 탐지·차단 배치</td></tr>
+  <tr><td>P2</td><td>Zero Trust (지속 인증)</td><td>NIST SP 800-207</td><td>모든 MAVLink·DDS 메시지에 ID 토큰 + 정책엔진 검사</td></tr>
+  <tr><td>P3</td><td>Cyber Resilience (회복)</td><td>NIST SP 800-160 Vol.2</td><td>Healer 에이전트의 자동 페일오버·세이프모드 전환</td></tr>
+  <tr><td>P4</td><td>AI Risk Management</td><td>NIST AI RMF 1.0 · ATLAS</td><td>인지 모델 적대적 입력 탐지 + 보조 모달리티 가중</td></tr>
+  <tr><td>P5</td><td>Mission Assurance</td><td>MIL-HDBK-1785, DoDI 8500.01</td><td>가용성 비용 c_avail을 RL 보상에 직접 반영</td></tr>
+</table>
+
+<!-- ===================== 2. 위협 모델링 ===================== -->
+<div class="page-break"></div>
+<h1>2. 위협 모델링</h1>
+
+<h2>2.1 UAV/UGV 공격 표면 지도</h2>
+<div class="ascii">
+                ┌────────────────────────────────────────────────────────┐
+   RF/EM 표면   │  GNSS(GPS/Galileo)  ·  SATCOM(L/Ku/Ka)  ·  Data-Link   │
+                │  Telemetry(MAVLink/CDL)  ·  Remote-ID  ·  Jam/Spoof    │
+                └──────────────────────────────┬─────────────────────────┘
+                                               │  복조/디코딩
+                ┌──────────────────────────────▼─────────────────────────┐
+   버스/프로토콜 │  STANAG 4586  ·  MAVLink 2.0  ·  CAN(J1939)  ·  1553B │
+                │  DDS(RTPS)  ·  Mission Plan(XML/JSON)                  │
+                └──────────────────────────────┬─────────────────────────┘
+                                               │  IPC/PubSub
+                ┌──────────────────────────────▼─────────────────────────┐
+   컴퓨트/OS    │  RTOS(VxWorks, INTEGRITY)  ·  Linux(PREEMPT_RT)        │
+                │  Containers(LXC/Podman)  ·  Bootloader/Secure Boot     │
+                └──────────────────────────────┬─────────────────────────┘
+                                               │  센서 입력
+                ┌──────────────────────────────▼─────────────────────────┐
+   인지/AI 계층 │  Vision · LiDAR · Radar · SLAM · 정책망(π) · 행동결정 │
+                └────────────────────────────────────────────────────────┘
+</div>
+
+<h2>2.2 MITRE ATT&amp;CK · ATLAS 매핑</h2>
+<p>본 대회 환경에 직접 관련된 기법을 추출하여 시나리오 설계 근거로 사용한다.</p>
+<table>
+  <tr><th>ID</th><th>매트릭스</th><th>기법</th><th>본 시나리오 매핑</th></tr>
+  <tr><td>T0830</td><td>ICS</td><td>Adversary-in-the-Middle</td><td>S-2 MAVLink C2 하이재킹</td></tr>
+  <tr><td>T0848</td><td>ICS</td><td>Rogue Master</td><td>S-2, S-7 1553B BC 위장</td></tr>
+  <tr><td>T0856</td><td>ICS</td><td>Spoof Reporting Message</td><td>S-1 GNSS · S-4 센서 기만</td></tr>
+  <tr><td>T0858</td><td>ICS</td><td>Change Operating Mode</td><td>S-8 스웜 합의 변조</td></tr>
+  <tr><td>T0813</td><td>ICS</td><td>Denial of Control</td><td>S-10 자원 고갈</td></tr>
+  <tr><td>T1557</td><td>ENT</td><td>AiTM</td><td>S-5 SATCOM MITM</td></tr>
+  <tr><td>T1542.003</td><td>ENT</td><td>Bootkit</td><td>S-3 펌웨어 변조</td></tr>
+  <tr><td>AML.T0015</td><td>ATLAS</td><td>Evade ML Model</td><td>S-6 인지망 회피</td></tr>
+  <tr><td>AML.T0043</td><td>ATLAS</td><td>Craft Adversarial Data</td><td>S-4 LiDAR 패치</td></tr>
+  <tr><td>AML.T0018</td><td>ATLAS</td><td>Backdoor ML Model</td><td>S-3 공급망 모델 트로이</td></tr>
+</table>
+
+<h2>2.3 STRIDE 분류</h2>
+<table>
+  <tr><th>S</th><th>T</th><th>R</th><th>I</th><th>D</th><th>E</th></tr>
+  <tr>
+    <td>위성/지상국 신원 위장</td>
+    <td>MAVLink 페이로드 변조</td>
+    <td>로그 부재 · 명령 부인</td>
+    <td>임무계획 유출</td>
+    <td>RF 재밍 · CPU 고갈</td>
+    <td>RTOS root 권한 취득</td>
+  </tr>
+</table>
+
+<h2>2.4 위협 행위자 모델</h2>
+<ul>
+  <li><b>Tier-1 국가 행위자</b> — SATCOM·GNSS 인프라 접근 가능, 0-day 보유. 본 대회 본선 환경의 기본 가정.</li>
+  <li><b>Tier-2 조직 행위자</b> — SDR 기반 RF 공격, 알려진 CVE 활용.</li>
+  <li><b>Insider</b> — 임무계획 단계의 신원 보유. NDA·접근통제로 격리.</li>
+</ul>
+
+<!-- ===================== 3. 공격 시나리오 ===================== -->
+<div class="page-break"></div>
+<h1>3. 공격 시나리오 설계 <small style="font-size:11pt;color:var(--muted)">(예선 배점 30점)</small></h1>
+<p>
+본 절은 본선 공방을 가정한 10개 시나리오로 구성된다. 각 시나리오는 <b>(1) 공격 목표 → (2) 표면/경로 → (3) AI 공격 에이전트 전략 →
+(4) 예상 방어 우회 → (5) 가용성 영향 평가</b>의 5요소로 기술한다.
+모든 시나리오는 <b>방어 측 점수를 직접 깎거나</b>, <b>가용성 계수를 직접 떨어뜨리도록</b> 설계되었다.
+</p>
+
+<h2>S-1 · GNSS 스푸핑/재밍 (위성항법 기만)</h2>
+<div class="grid2 avoid">
+  <div class="card">
+    <div class="t">목표</div>비행체 위치 추정을 점진적으로 이격(<em>drag-off</em>)시켜 임무 좌표 이탈 유도.<br>
+    <div class="t" style="margin-top:6pt">표면</div>L1/L2 GPS, Galileo E1/E5 RF 입력. 클라우드에서는 GNSS 시뮬레이션 토픽 변조.<br>
+    <div class="t" style="margin-top:6pt">AI 전략</div>RL 기반 점진적 위치 오프셋 — 비행체 INS 칼만필터의 잔차(residual) 임계를 초과하지 않으면서 좌표를 유도.
+  </div>
+  <div class="card">
+    <div class="t">우회 포인트</div>Receiver Autonomous Integrity Monitoring(RAIM) · 단순 임계 IDS<br>
+    <div class="t" style="margin-top:6pt">가용성 영향</div>중(비행 지속, 좌표만 이탈). 채점 친화적.<br>
+    <div class="t" style="margin-top:6pt">참조</div>Humphreys(UT Austin) GNSS spoofing, NIST IR 8270 §4
+  </div>
+</div>
+
+<h2>S-2 · MAVLink 2.0 C2 하이재킹 (Adversary-in-the-Middle)</h2>
+<p>
+MAVLink는 기본 무인증 프로토콜이며, 2.0에서 서명 확장이 도입되었으나 키 회전·재생 보호가 약하다.
+공격 에이전트는 위성 게이트웨이에서 (i) <code>HEARTBEAT</code> 시퀀스를 학습, (ii) 정상 트래픽 사이에 <code>COMMAND_LONG</code>
+의 <code>MAV_CMD_DO_REPOSITION</code>·<code>MAV_CMD_DO_SET_MODE</code> 를 인젝션, (iii) <code>STATUSTEXT</code>를 위조하여 지상국 로그를 오염시킨다.
+</p>
+<blockquote>방어 우회: 서명 키가 PSK인 경우 LLM 에이전트가 트래픽 패턴 회귀로 키 회전 시점을 추정 → 회전 직전 윈도우에 인젝션 집중.</blockquote>
+
+<h2>S-3 · 펌웨어/공급망 변조 (Supply-Chain Bootkit + ML Trojan)</h2>
+<ul>
+  <li><b>Bootkit</b>: Secure Boot 미적용 부트로더 영역에 부팅 시 메모리 패치를 삽입(MITRE T1542.003).</li>
+  <li><b>ML Trojan</b>: 인지 모델에 트리거 패턴(특정 위장 텍스처)에 반응하는 백도어 삽입(ATLAS AML.T0018).</li>
+  <li><b>대회 환경</b>: 컨테이너 이미지 레지스트리 측에 변조된 layer 주입.</li>
+</ul>
+
+<h2>S-4 · 센서 적대적 입력 (LiDAR/Camera Adversarial)</h2>
+<p>
+경계 인식 모델의 출력을 변조하기 위해 (i) 카메라에 대해 <em>적대적 패치(patch)</em> 텍스처를 환경에 배치, (ii) LiDAR에 대해
+<em>가짜 점군</em>을 모사 인젝션. 본 대회의 클라우드 환경에서는 시뮬레이션 시계열에 노이즈 토픽을 직접 발행한다.
+</p>
+
+<h2>S-5 · SATCOM MITM (위성 링크 중간자)</h2>
+<p>
+모사된 위성 게이트웨이 사이에 프록시를 설치, (i) STANAG 4586 LOI(Level of Interoperability) 메시지의 우선순위 필드를 변조,
+(ii) NTP 응답을 지연시켜 비행체 시간 동기를 흔든다. 시간 동기 흔들기는 후속 공격 S-2의 서명 재생 윈도우를 확장시키는 <em>전제 공격</em>.
+</p>
+
+<h2>S-6 · AI 모델 회피 — 정책망 적대적 입력</h2>
+<p>
+강화학습 기반 항로 결정망 π(s) 의 관측 s 에 적대적 노이즈를 가하여 선회 결정을 왜곡. 본 대회의 자율 회피 기동 모델이 표적.
+공격 에이전트는 LLM으로 <em>관측 토큰의 어떤 부위를 변조해야 가용성 영향 없이 결정만 흔드는지</em> 추론한 후 RL로 미세조정한다.
+</p>
+
+<h2>S-7 · CAN / MIL-STD-1553B 메시지 인젝션 (UGV)</h2>
+<p>
+UGV의 구동·조향 명령은 CAN(J1939) 또는 1553B로 흐른다. RC(원격 단말)을 BC(Bus Controller)로 위장하는 <em>Rogue BC</em>(T0848)를 통해
+가짜 조향각/스로틀 명령을 주기적으로 주입. 단발성이 아닌 <em>저강도 지속(low-and-slow)</em> 패턴으로 IDS 평균선을 회피.
+</p>
+
+<h2>S-8 · 스웜 합의 알고리즘 공격</h2>
+<p>
+다수 UAV의 합의(consensus) 기반 편대 비행에서 <em>비잔틴 노드</em> 1대가 거짓 위치·잔량 정보를 방송. 합의 알고리즘이 평균 기반인 경우
+1/3 미만의 노드만 오염되어도 편대가 표적 영역을 이탈하도록 유도 가능.
+</p>
+
+<h2>S-9 · 사이드채널 키 추출</h2>
+<p>전력/전자기 분석으로 AES·ECDSA 키 추출. 대회 환경에서는 컨테이너 cgroup 카운터를 통한 timing 분석으로 모사.</p>
+
+<h2>S-10 · 자원 고갈 DoS (가용성 표적 — <span class="badge warn">고위험</span>)</h2>
+<p>
+방어 측이 IDS 룰을 과도하게 적재했을 때를 노려 <em>의도적 false positive 유발</em> 트래픽으로 SIEM 큐를 폭주시킨다.
+역설적으로 방어 측 자신의 가용성 계수를 떨어뜨리도록 유도하는 <b>방어 자해(self-DoS) 유도형</b>. 가장 채점 친화적 공격.
+</p>
+
+<h3>시나리오 우선순위 매트릭스</h3>
+<table>
+  <tr><th>#</th><th>공격 점수 기여</th><th>방어 회피 난이도</th><th>가용성 친화도</th><th>본선 권장 우선순위</th></tr>
+  <tr><td>S-1</td><td>높음</td><td>중</td><td><b>높음</b></td><td>★★★★★</td></tr>
+  <tr><td>S-2</td><td>매우 높음</td><td>중-상</td><td>중</td><td>★★★★★</td></tr>
+  <tr><td>S-3</td><td>중</td><td>상</td><td>중</td><td>★★★</td></tr>
+  <tr><td>S-4</td><td>높음</td><td>중</td><td>높음</td><td>★★★★</td></tr>
+  <tr><td>S-5</td><td>중</td><td>중</td><td>높음</td><td>★★★★</td></tr>
+  <tr><td>S-6</td><td>높음</td><td>상</td><td><b>매우 높음</b></td><td>★★★★★</td></tr>
+  <tr><td>S-7</td><td>높음</td><td>중</td><td>중</td><td>★★★★</td></tr>
+  <tr><td>S-8</td><td>중-상</td><td>상</td><td>중</td><td>★★★</td></tr>
+  <tr><td>S-9</td><td>중</td><td>매우상</td><td>높음</td><td>★★</td></tr>
+  <tr><td>S-10</td><td>중</td><td>중</td><td><b>방어자해 유도</b></td><td>★★★★★</td></tr>
+</table>
+
+<!-- ===================== 4. 방어 전략 ===================== -->
+<div class="page-break"></div>
+<h1>4. 방어 전략 <small style="font-size:11pt;color:var(--muted)">(예선 배점 25점)</small></h1>
+<p>본 절은 <b>Defense-in-Depth × Zero Trust × Resilient Control</b>의 3축을 결합한 통합 방어 모델을 제시한다.</p>
+
+<h2>4.1 4-계층 Defense-in-Depth</h2>
+<div class="ascii">
+  ┌────────── L4 인지/AI ───────────┐   적대적 입력 탐지 · 모달리티 가중 · 정책망 검증(verified policy)
+  │     (Vision, LiDAR, Policy π)    │
+  ├────────── L3 컴퓨트/OS ──────────┤   Secure Boot · TPM · eBPF/Falco · Container sigstore
+  │   (RTOS, Linux, Container)       │
+  ├────────── L2 버스/프로토콜 ──────┤   MAVLink 서명 강화 · DDS-Security · 1553B 행위 IDS
+  │   (MAVLink, DDS, CAN, 1553B)     │
+  ├────────── L1 RF/EM ──────────────┤   GNSS 무결성(RAIM+) · 빔포밍 · Anti-Jam · Spoof 탐지
+  │   (GNSS, SATCOM, Data-Link)      │
+  └──────────────────────────────────┘
+</div>
+
+<h3>L1 — RF/EM 계층</h3>
+<ul>
+  <li><b>GNSS 무결성</b>: 다중 위성군(GPS+Galileo+KASS) 교차검증, 클락 잔차 + 신호 강도(C/N0) + 도플러 일치성 기반 RAIM+.</li>
+  <li><b>Anti-Spoof</b>: 단일 안테나 환경에서도 가능한 신호 도래각(AOA) 추정 + 동적 패턴 변화 감시.</li>
+  <li><b>SATCOM Anti-Jam</b>: Frequency Hopping(STANAG 4606류) + 적응적 부호화율 변조.</li>
+</ul>
+
+<h3>L2 — 버스/프로토콜 계층</h3>
+<ul>
+  <li><b>MAVLink 2.0 Hardening</b>: HMAC-SHA256 서명 + 시퀀스 재생 보호 + <em>키 회전 주기 ≤ 30 s</em> + <code>timestamp</code> 단조증가 강제.</li>
+  <li><b>DDS-Security</b>(OMG): Authentication / Access Control / Cryptographic 3 플러그인 활성화, 토픽 단위 권한 분리.</li>
+  <li><b>1553B 행위 IDS</b>: BC가 주기적으로 발신하는 RT-RT 통신 패턴을 시계열 모델로 학습 → Rogue BC 탐지.</li>
+  <li><b>CAN J1939</b>: PGN 단위 정상 시계열 학습, 이상 PGN 발생 시 Healer 에이전트에 즉시 보고.</li>
+</ul>
+
+<h3>L3 — 컴퓨트/OS 계층</h3>
+<ul>
+  <li><b>Measured Boot + TPM</b>: 부트체인 PCR 측정값 검증, Secure Boot 미통과 시 세이프모드 진입.</li>
+  <li><b>eBPF 기반 런타임 가시성</b>: syscall · network · file 이벤트를 4 ms 단위로 수집(Tetragon 등 활용).</li>
+  <li><b>컨테이너 무결성</b>: cosign/sigstore 서명 검증, 변조된 layer 발견 시 컨테이너 격리.</li>
+  <li><b>최소 권한</b>: 미션 컨트롤 컨테이너는 <code>CAP_NET_RAW</code> 거부, 별도 게이트웨이 분리.</li>
+</ul>
+
+<h3>L4 — 인지/AI 계층</h3>
+<ul>
+  <li><b>적대적 입력 탐지</b>: feature squeezing + Mahalanobis OOD 점수 + 모달리티 일관성(LiDAR↔Camera) 교차검증.</li>
+  <li><b>정책망 안전망</b>: 강화학습 π(s)의 행동 a를 별도의 <em>Safety Shield</em>(formally-verified rule)로 후필터링.</li>
+  <li><b>모델 무결성</b>: 모델 weights 해시 검증(매 부팅), MLOps 파이프라인의 데이터 lineage 보존.</li>
+</ul>
+
+<h2>4.2 Zero Trust for Tactical Edge</h2>
+<p>
+NIST SP 800-207 원칙을 무인이동체 환경에 적용한다. 핵심 원칙: <b>"네트워크 위치는 신뢰의 근거가 아니다"</b>.
+모든 MAVLink/DDS 메시지는 다음 5속성을 검사받는다 — <em>발신자 ID, 메시지 정책, 시간 무결성, 시퀀스 무결성, 컨텍스트(임무 단계)</em>.
+정책엔진(PE)은 SPIFFE-style ID 토큰을 검증하고, 결정은 PEP(정책 시행점)에서 강제된다.
+</p>
+
+<h2>4.3 Resilient Control — 회복탄력성</h2>
+<p>
+방어가 실패해도 임무 가용성은 유지되어야 한다. 본 시스템은 다음 3 모드를 정의한다.
+</p>
+<table>
+  <tr><th>모드</th><th>트리거</th><th>행동</th><th>가용성 영향</th></tr>
+  <tr><td>Normal</td><td>모든 지표 정상</td><td>풀 자율 비행</td><td>100%</td></tr>
+  <tr><td>Degraded</td><td>L1/L2 이상 감지</td><td>임무 유지 + 검증 강화 + 보조 채널 우선</td><td>≥ 95%</td></tr>
+  <tr><td>Safe-Hold</td><td>L3/L4 위협 확정</td><td>호버/정지 + 사전 검증된 복귀 좌표만 수신</td><td>임무 일시 정지(가용성 60–80%)</td></tr>
+</table>
+
+<h2>4.4 방어 KPI</h2>
+<ul>
+  <li>MTTD (탐지 평균시간) ≤ <b>2.5 초</b> (위성 RTT 고려)</li>
+  <li>MTTR (대응 평균시간) ≤ <b>5.0 초</b></li>
+  <li>오탐율 (FPR) ≤ <b>1%</b> (가용성 보존 최우선)</li>
+  <li>임무 가용성 ≥ <b>95%</b> 채점 윈도우 기준</li>
+</ul>
+
+<!-- ===================== 5. AI 에이전트 ===================== -->
+<div class="page-break"></div>
+<h1>5. AI 방어 에이전트 아키텍처 <small style="font-size:11pt;color:var(--muted)">(예선 배점 25점)</small></h1>
+
+<h2>5.1 설계 원칙</h2>
+<ol>
+  <li><b>역할 분리</b>: 단일 LLM 만능 에이전트가 아니라 <em>4역할의 다중 에이전트</em>. 인간 조직(SOC)을 모방.</li>
+  <li><b>이중 사고</b>: <em>System-1(빠른 RL 정책)</em> + <em>System-2(느린 LLM 추론)</em> 하이브리드. Kahneman의 사고 모델 차용.</li>
+  <li><b>도구 사용</b>: 모든 에이전트는 표준 도구 인터페이스(eBPF, Suricata, Falco, OpenZiti, MAVLink-proxy) 호출 가능.</li>
+  <li><b>설명가능성</b>: 모든 결정은 <em>Reasoning Trace</em>를 남기며, 사후 NDA 감사 가능.</li>
+  <li><b>비용 함수 일치</b>: 보상함수 <code>R = ΔA + ΔD − λ&middot;c_avail</code>, λ는 채점식 곱셈 효과를 반영.</li>
+</ol>
+
+<h2>5.2 4역할 에이전트</h2>
+<div class="grid2 avoid">
+  <div class="card">
+    <div class="t">Sentinel — 탐지 (Detection)</div>
+    eBPF + Suricata + 인지 OOD 검출기에서 수집된 신호를 1차 분류. 경량 분류기(GBDT)와 시계열 이상치 모델(Isolation Forest, LSTM-VAE) 앙상블.
+    초당 수천 이벤트를 처리, <em>의심 토큰</em>을 Hunter로 발행.
+  </div>
+  <div class="card">
+    <div class="t">Hunter — 추론 · 조사 (Reasoning)</div>
+    LLM 기반(예: Claude/Qwen). 의심 토큰 + 컨텍스트(임무 단계, 최근 명령, 인지 모달리티 불일치)를 받아
+    <em>가설 → 검증 도구 호출 → 결론</em> 의 ReAct 루프를 수행. Tool list: <code>query_ebpf</code>, <code>diff_mavlink_signature</code>, <code>compare_lidar_camera</code> 등.
+  </div>
+  <div class="card">
+    <div class="t">Healer — 대응 · 복원 (Response)</div>
+    RL 정책망 π_H(s). 행동공간 = {block, isolate, rollback, mode-shift, no-op}.
+    보상 <code>R = ΔD − λc_avail</code> 으로 학습 — <b>가용성을 손상시키지 않는 차단을 선호</b>한다.
+  </div>
+  <div class="card">
+    <div class="t">Coordinator — 조정 · 정책 (Policy)</div>
+    임무 단계(이륙·순항·표적·복귀)별 정책 매트릭스 적용. 다른 3 에이전트의 결정 충돌을 조정.
+    LLM 기반의 short-context 정책 검토.
+  </div>
+</div>
+
+<h2>5.3 시스템 아키텍처</h2>
+<div class="ascii">
+                ┌─────────────────────────────────────────────────────────────┐
+                │                  Mission Plan / RoE Policy                   │
+                └─────────────────────────────┬───────────────────────────────┘
+                                              │
+                ┌─────────────────────────────▼───────────────────────────────┐
+                │                   Coordinator (LLM)                         │
+                │           ─ 임무 단계 인지 · 정책 조율 · 충돌 해소 ─          │
+                └──────┬─────────────┬──────────────┬─────────────────────────┘
+                       │             │              │
+                ┌──────▼───┐   ┌─────▼─────┐  ┌─────▼──────┐
+                │ Sentinel │   │  Hunter   │  │   Healer    │
+                │  (ML 앙상블)│   │   (LLM)   │  │   (RL π)    │
+                └────┬─────┘   └─────┬─────┘  └─────┬───────┘
+                     │               │              │
+       Telemetry/Logs│      Tool Calls (eBPF/Suricata/Proxy)   Mitigation Actions
+                     │               │              │
+                ┌────▼───────────────▼──────────────▼────────┐
+                │              Data Plane (UAV/UGV)            │
+                │   L1 RF · L2 Bus · L3 OS · L4 Perception     │
+                └──────────────────────────────────────────────┘
+</div>
+
+<h2>5.4 Observation / Action Space</h2>
+<p>Healer RL 에이전트의 정의는 다음과 같다.</p>
+<pre><span class="c"># Observation s_t</span>
+s_t = {
+  rf:        {gnss_residual, cn0_var, sat_drift_rate},
+  bus:       {mavlink_sig_fail_rate, dds_acl_deny_rate, can_anomaly_score},
+  compute:   {syscall_kl_div, file_integrity_violations, cpu_throttle_ms},
+  cognition: {lidar_camera_iou, ood_score, policy_entropy_delta},
+  mission:   {phase, time_to_waypoint, fuel_pct},
+  scoreboard:{availability_pct, attack_pts, defense_pts}
+}
+
+<span class="c"># Action a_t  (가용성 영향 비용 c_avail 부여)</span>
+A = [
+  ("no_op",                  c_avail=0.00),
+  ("rotate_mavlink_key",     c_avail=0.02),
+  ("isolate_compromised_pod",c_avail=0.10),
+  ("switch_modality_weight", c_avail=0.05),  <span class="c"># LiDAR vs Camera</span>
+  ("enter_safe_hold",        c_avail=0.35),
+  ("rollback_firmware",      c_avail=0.45),
+  ("kill_suspect_link",      c_avail=0.20),
+]
+
+<span class="c"># Reward — 채점식과 일치</span>
+R_t = (delta_attack + delta_defense) * (availability_t / 100.0)
+      - lambda_a * c_avail(a_t)
+      - lambda_f * false_positive_indicator
+</pre>
+
+<h2>5.5 Hunter LLM의 도구 사용 패턴 (ReAct)</h2>
+<pre><span class="c"># Hunter의 단일 사이클 - 예: S-2 MAVLink 인젝션 의심</span>
+Thought: HEARTBEAT 시퀀스 누락 + COMMAND_LONG 빈도 급증. MITM 가능성 평가 필요.
+Action:  query_ebpf(filter="mavsdk_proxy ingress 5s", fields="src,seq,sig_ok")
+Obs:     56 packets, sig_ok=false: 31, src_anomaly: 22
+Thought: 서명 실패율 55% &gt; 임계 5%. S-2 강한 신호. 가용성 영향 최소 대응 탐색.
+Action:  propose_action(candidates=["rotate_mavlink_key","kill_suspect_link"])
+Obs:     rotate_key c_avail=0.02, kill_link c_avail=0.20
+Thought: rotate_key 우선, 5초 내 회복 없을 시 kill_link 에스컬레이션.
+Final:   handoff_to_healer(plan="rotate_key -&gt; observe(5s) -&gt; escalate")
+</pre>
+
+<h2>5.6 학습 파이프라인</h2>
+<ul>
+  <li><b>Pre-train</b>: MITRE ATT&amp;CK + ATLAS 시나리오 시뮬레이터에서 1000+ 에피소드.</li>
+  <li><b>Offline RL</b>: Conservative Q-Learning(CQL)로 안전성 우선 정책 학습. <em>오프라인 데이터로 임무 정지 사고 회피</em>.</li>
+  <li><b>Online RLHF/RLAIF</b>: 시뮬레이션 내 인간 또는 상위 LLM의 행동 피드백.</li>
+  <li><b>Continual</b>: 본선 환경 적응 시 Federated 방식(다른 비행체와 가중치 공유, raw 데이터 미전송).</li>
+</ul>
+
+<h2>5.7 안전 가드 — Safety Shield</h2>
+<p>
+RL 정책의 출력은 항상 <em>Safety Shield</em>를 통과한다. Shield는 formally-verified BTL(Boolean Temporal Logic) 규칙으로,
+다음을 절대 위반하지 않는다 — (i) 비행체가 임무 영역을 1.5 km 이상 이탈하는 행동 금지, (ii) 동시 다발 격리(isolate)
+3건 이상 금지(자해 방지), (iii) Safe-Hold는 Coordinator 동의 필수.
+</p>
+
+<!-- ===================== 6. 채점 최적화 ===================== -->
+<div class="page-break"></div>
+<h1>6. 채점식 최적화 — 가용성 보존 보상 설계</h1>
+<p>대회 채점식 <code>S = (Attack + Defense) × Availability</code>의 곱셈 항이 의미하는 바를 정량적으로 분해한다.</p>
+<div class="scoring">
+  Attack = 70, Defense = 80, Avail = 100  →  S = 150 × 1.00 = <b>150.0</b><br>
+  Attack = 90, Defense = 95, Avail = 70   →  S = 185 × 0.70 = <b>129.5</b><br>
+  Attack = 60, Defense = 70, Avail = 100  →  S = 130 × 1.00 = <b>130.0</b>
+</div>
+<p>
+즉, <b>같은 (A+D) 합계에서 가용성 30%pt 손실 = 점수 30% 손실</b>. 본 시스템의 모든 액션은 <code>c_avail</code>를 부여받으며,
+Healer 정책은 <em>가용성 보존 액션을 우선 채택</em>하도록 학습된다. 대표적으로 "전체 차단" 대신 "키 회전 + 관찰 윈도우" 같은
+<b>저영향 대응 우선</b> 패턴을 채택한다.
+</p>
+
+<h2>6.1 오탐 비용 곡선</h2>
+<p>오탐(False Positive)은 가용성 손실로 직결된다. λ_f 를 통한 학습 시 가용성 곡선:</p>
+<div class="ascii">
+  Availability(%)
+  100 |█████████─────             FPR=0.5%
+   95 |████████████─────          FPR=1.0%   ← 목표
+   85 |█████████████████─────     FPR=3.0%
+   70 |█████████████████████      FPR=8.0%
+       0     1     3     5     8   FPR(%)
+</div>
+
+<h2>6.2 본선 라운드 전략</h2>
+<ol>
+  <li><b>초반 5분</b>: 공격은 S-1/S-5 같은 저영향 시나리오로 점수 누적, 방어는 baseline 가용성 100% 유지.</li>
+  <li><b>중반</b>: S-2/S-7 본격 침투 시도. Healer는 키 회전 + 격리 1건 정도로 응대.</li>
+  <li><b>후반</b>: S-10(자해 유도) 회피 — IDS 룰 임계를 동적으로 완화하여 큐 폭주 방지.</li>
+</ol>
+
+<!-- ===================== 7. 로드맵 ===================== -->
+<div class="page-break"></div>
+<h1>7. 구현 로드맵 · 평가 계획 · 리스크</h1>
+
+<h2>7.1 예선 → 본선 로드맵</h2>
+<table>
+  <tr><th>주차</th><th>마일스톤</th><th>산출물</th></tr>
+  <tr><td>W1–W2</td><td>위협 모델 확정 · 시뮬레이터 셋업(Gazebo+PX4+MAVProxy)</td><td>위협 매트릭스, 환경 docker-compose</td></tr>
+  <tr><td>W3–W4</td><td>Sentinel · Hunter v0.1 · 5개 시나리오 시연</td><td>예선 보고서 v1</td></tr>
+  <tr><td>W5–W6</td><td>Healer RL 학습 · Safety Shield 검증</td><td>RL 정책 weights, 룰 셋</td></tr>
+  <tr><td>W7</td><td>본선 환경 적응 · Federated 가중치 동기화</td><td>적응 후 모델</td></tr>
+  <tr><td>W8</td><td>본선 리허설 · 가용성 튜닝</td><td>최종 산출물</td></tr>
+</table>
+
+<h2>7.2 평가 계획</h2>
+<ul>
+  <li>샌드박스 시뮬레이터(PX4 SITL × Gazebo Garden × MAVSDK)에서 10개 시나리오 자동 회귀.</li>
+  <li>채점식 그대로의 Reward 환경에서 baseline(룰만), Sentinel-only, Full-stack 3 모델 A/B 비교.</li>
+  <li>적대적 ML 평가는 ART(Adversarial Robustness Toolbox) · Foolbox 사용.</li>
+</ul>
+
+<h2>7.3 핵심 리스크 · 완화</h2>
+<table>
+  <tr><th>리스크</th><th>영향</th><th>완화책</th></tr>
+  <tr><td>LLM 추론 지연 &gt; SATCOM RTT</td><td>Hunter 응답 지연 → 가용성 손실</td><td>Sentinel에 사전 분류기, Hunter는 비실시간 경로만</td></tr>
+  <tr><td>RL 과적합</td><td>본선 환경 미스매치</td><td>CQL + 다양한 시드 학습, 도메인 무작위화</td></tr>
+  <tr><td>오탐 폭주</td><td>가용성 직접 손실</td><td>λ_f 적극 부여, Safety Shield의 동시 격리 금지</td></tr>
+  <tr><td>NDA 감사 요구</td><td>제출 기각 위험</td><td>Reasoning Trace · Tool Log 보존, 외부 모델 호출 금지</td></tr>
+</table>
+
+<!-- ===================== 8. 팀 ===================== -->
+<div class="page-break"></div>
+<h1>8. 팀 역량 및 운영 체계 <small style="font-size:11pt;color:var(--muted)">(예선 배점 10점)</small></h1>
+<p><em>※ 본 항목은 팀 결성 후 실명·이력으로 교체하여 최종 제출됩니다. 아래는 권장 구성 템플릿입니다.</em></p>
+<table>
+  <tr><th>역할</th><th>전문 영역</th><th>책임</th><th>요구 역량 예시</th></tr>
+  <tr><td>팀장</td><td>방산·시스템 보안</td><td>위협 모델, NDA, 인터페이스 통합</td><td>NIST SP 800-82, MIL-STD 경험</td></tr>
+  <tr><td>AI 엔지니어</td><td>LLM · Agent · RL</td><td>Hunter LLM, Healer RL 학습</td><td>ReAct·RLHF·CQL 구현 경험</td></tr>
+  <tr><td>플랫폼 엔지니어</td><td>Cloud · eBPF · 컨테이너</td><td>관측·격리·자동 복구 인프라</td><td>Tetragon·Falco·sigstore</td></tr>
+  <tr><td>RF/CPS 엔지니어</td><td>GNSS · SATCOM · MAVLink</td><td>L1·L2 시뮬레이터, 공격 PoC</td><td>SDR(gr-osmosdr), PX4 SITL</td></tr>
+</table>
+
+<h2>8.1 운영 체계</h2>
+<ul>
+  <li>주 2회 stand-up(15분) + 주 1회 위협 리뷰(60분).</li>
+  <li>모든 시뮬레이션 산출물은 git LFS + DVC로 버저닝.</li>
+  <li>본선 D-7부터 매일 1라운드 풀 리허설.</li>
+</ul>
+
+<!-- ===================== A. 참고문헌 ===================== -->
+<div class="page-break"></div>
+<h1>부록 A — 참고 표준 · 문헌 · 자료</h1>
+
+<h3>A.1 위협 프레임워크</h3>
+<ol>
+  <li>MITRE ATT&amp;CK for ICS. <small>attack.mitre.org/matrices/ics/</small></li>
+  <li>MITRE ATLAS (Adversarial Threat Landscape for AI Systems). <small>atlas.mitre.org</small></li>
+  <li>MITRE D3FEND (Defensive Techniques). <small>d3fend.mitre.org</small></li>
+  <li>STRIDE Threat Modeling. Microsoft SDL.</li>
+</ol>
+
+<h3>A.2 미국 표준·가이드</h3>
+<ol start="5">
+  <li>NIST SP 800-82 Rev.3 — <em>Guide to OT Security</em>, 2023.</li>
+  <li>NIST SP 800-207 — <em>Zero Trust Architecture</em>, 2020.</li>
+  <li>NIST SP 800-160 Vol.2 — <em>Developing Cyber Resilient Systems</em>.</li>
+  <li>NIST IR 8270 — <em>Introduction to Cybersecurity for Commercial Satellite Operations</em>.</li>
+  <li>NIST AI RMF 1.0 — <em>Artificial Intelligence Risk Management Framework</em>.</li>
+  <li>NIST SP 800-193 — <em>Platform Firmware Resiliency Guidelines</em>.</li>
+</ol>
+
+<h3>A.3 군용 · NATO 표준</h3>
+<ol start="11">
+  <li>STANAG 4586 — <em>Standard Interfaces of UAV Control System (UCS) for NATO UAV Interoperability</em>.</li>
+  <li>MIL-STD-1553B — <em>Digital Time Division Command/Response Multiplex Data Bus</em>.</li>
+  <li>MIL-HDBK-1785 — <em>System Security Engineering Program Management</em>.</li>
+  <li>DoDI 8500.01 — <em>Cybersecurity</em>.</li>
+  <li>STANAG 4609 — <em>NATO Digital Motion Imagery Standard</em> (FMV 보안 컨텍스트).</li>
+  <li>STANAG 4671 — <em>UAV Systems Airworthiness Requirements</em>.</li>
+</ol>
+
+<h3>A.4 프로토콜 · 산업 표준</h3>
+<ol start="17">
+  <li>MAVLink 2.0 Protocol Specification. <small>mavlink.io</small></li>
+  <li>OMG DDS-Security v1.1 — <em>Authentication / AccessControl / Cryptographic Plugins</em>.</li>
+  <li>SAE J1939 — <em>Recommended Practice for a Serial Control and Communications Vehicle Network</em>.</li>
+  <li>SPIFFE/SPIRE — <em>Secure Production Identity Framework for Everyone</em>.</li>
+  <li>Sigstore/Cosign — <em>Container image signing &amp; transparency log</em>.</li>
+</ol>
+
+<h3>A.5 학술 · 연구</h3>
+<ol start="22">
+  <li>Humphreys T.E. et al. — <em>Assessing the Spoofing Threat: Development of a Portable GPS Civilian Spoofer</em>, ION GNSS, 2008 (이후 시리즈).</li>
+  <li>Goodfellow I. et al. — <em>Explaining and Harnessing Adversarial Examples</em>, ICLR 2015.</li>
+  <li>Madry A. et al. — <em>Towards Deep Learning Models Resistant to Adversarial Attacks</em>, ICLR 2018.</li>
+  <li>Kumar R. et al. — <em>Adversarial Machine Learning - Industry Perspectives</em>, Microsoft 2020.</li>
+  <li>Alshamrani A. et al. — <em>A Survey on Advanced Persistent Threats</em>, IEEE Comm. Surveys, 2019.</li>
+  <li>Yağdereli E. et al. — <em>A Study on Cyber-security of Autonomous and UAV Systems</em>, J. of Defense Modeling, 2015.</li>
+  <li>Javaid A.Y. et al. — <em>Cyber Security Threat Analysis and Modeling of an Unmanned Aerial Vehicle System</em>, IEEE HST 2012.</li>
+  <li>Kushner D. — <em>The Real Story of Stuxnet</em>, IEEE Spectrum 2013 (ICS Lessons).</li>
+  <li>DARPA HACMS Program — <em>High-Assurance Cyber Military Systems</em> (Boeing/Galois 결과 보고서).</li>
+</ol>
+
+<h3>A.6 도구 · 오픈소스</h3>
+<ol start="31">
+  <li>Suricata IDS — <small>suricata.io</small></li>
+  <li>Zeek (Bro) — <small>zeek.org</small></li>
+  <li>Falco — Cloud-Native Runtime Security — <small>falco.org</small></li>
+  <li>Tetragon — eBPF-based Security Observability — <small>tetragon.io</small></li>
+  <li>OpenZiti — Zero Trust Networking — <small>openziti.io</small></li>
+  <li>ART (Adversarial Robustness Toolbox), IBM — <small>github.com/Trusted-AI/adversarial-robustness-toolbox</small></li>
+  <li>Foolbox — Adversarial Attacks — <small>github.com/bethgelab/foolbox</small></li>
+  <li>PX4 SITL · Gazebo · MAVSDK — UAV 시뮬레이션 스택.</li>
+  <li>ROS 2 / DDS — UGV 통신 스택.</li>
+</ol>
+
+<h3>A.7 정부·기관 보고서</h3>
+<ol start="40">
+  <li>ENISA — <em>Drones Cybersecurity</em>, 2024.</li>
+  <li>U.S. CISA — <em>Cybersecurity Guidance: Chinese-Manufactured UAS</em>, 2024.</li>
+  <li>KISA — <em>드론 정보보호 가이드</em>, 한국인터넷진흥원.</li>
+  <li>ADD(국방과학연구소) 무인체계 연구실 — 공개 학술 발표 자료.</li>
+</ol>
+
+<!-- ===================== B. 약어 ===================== -->
+<div class="page-break"></div>
+<h1>부록 B — 약어 · 용어 정의</h1>
+<table>
+  <tr><th>약어</th><th>풀이</th><th>약어</th><th>풀이</th></tr>
+  <tr><td>UAV</td><td>Unmanned Aerial Vehicle</td><td>UGV</td><td>Unmanned Ground Vehicle</td></tr>
+  <tr><td>CPS</td><td>Cyber-Physical System</td><td>GNSS</td><td>Global Navigation Satellite System</td></tr>
+  <tr><td>SATCOM</td><td>Satellite Communication</td><td>STANAG</td><td>Standardization Agreement (NATO)</td></tr>
+  <tr><td>MAVLink</td><td>Micro Air Vehicle Link</td><td>DDS</td><td>Data Distribution Service</td></tr>
+  <tr><td>ATT&amp;CK</td><td>Adversarial Tactics, Techniques &amp; Common Knowledge</td><td>ATLAS</td><td>Adversarial Threat Landscape for AI Systems</td></tr>
+  <tr><td>RAIM</td><td>Receiver Autonomous Integrity Monitoring</td><td>RoE</td><td>Rules of Engagement</td></tr>
+  <tr><td>SOC</td><td>Security Operations Center</td><td>IDS</td><td>Intrusion Detection System</td></tr>
+  <tr><td>SLA</td><td>Service Level Agreement</td><td>MTTD/R</td><td>Mean Time to Detect / Respond</td></tr>
+  <tr><td>RL</td><td>Reinforcement Learning</td><td>LLM</td><td>Large Language Model</td></tr>
+  <tr><td>CQL</td><td>Conservative Q-Learning</td><td>OOD</td><td>Out-of-Distribution</td></tr>
+  <tr><td>eBPF</td><td>extended Berkeley Packet Filter</td><td>TPM</td><td>Trusted Platform Module</td></tr>
+  <tr><td>PEP/PE</td><td>Policy Enforcement Point / Engine</td><td>SPIFFE</td><td>Secure Production Identity Framework for Everyone</td></tr>
+</table>
+
+<hr>
+<p class="footer-note">
+본 보고서는 DAH 2026 예선 보고서 작성 가이드(공격 시나리오 30 / 방어 25 / AI 에이전트 25 / 팀 역량 10 / 문서 완성도 10)에 정합하여 작성되었습니다.
+모든 기술 내용은 공개 표준·학술 문헌·오픈소스 자료에 근거하며, 특정 시스템의 비공개 취약점·실증 익스플로잇 코드는 포함하지 않습니다.
+본선 진출 시 NDA 정식 서명 후 상세 PoC 산출물을 별도 제출합니다.
+</p>
+
+</body></html>
